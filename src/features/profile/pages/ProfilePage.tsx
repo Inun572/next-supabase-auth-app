@@ -27,7 +27,7 @@ const ProfilePage = () => {
 
   const form = useForm<EditProfileFormSchema>({
     defaultValues: {
-      bio: getProfileData?.bio || "",
+      bio: getProfileData?.bio ?? "",
       username: getProfileData?.username,
     },
     resolver: zodResolver(editProfileFormSchema)
@@ -119,7 +119,7 @@ const ProfilePage = () => {
       form.setValue("username", getProfileData.username ?? "");
       form.setValue("bio", getProfileData.bio ?? "");
     }
-  }, [getProfileData]);
+  }, [form, getProfileData]);
 
   return (
     <AuthRoute>
@@ -158,14 +158,7 @@ const ProfilePage = () => {
                 {/* TODO: Skeleton when loading data */}
                 {getProfileData ? (
                   <Form {...form}>
-                    <EditProfileFormInner 
-                      defaultValues={
-                        {
-                          bio: getProfileData?.bio || "",
-                          username: getProfileData?.username,
-                        }
-                      }
-                    />
+                    <EditProfileFormInner />
                   </Form>
                 )
                 : (

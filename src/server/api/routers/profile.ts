@@ -4,7 +4,6 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { supabaseAdminClient } from "~/lib/supabase/server";
 import { SUPABASE_BUCKET } from "~/lib/supabase/bucket";
-import { create } from "domain";
 
 export const profileRouter = createTRPCRouter({
   getProfile: privateProcedure.query(async ({ ctx }) => {
@@ -47,8 +46,8 @@ export const profileRouter = createTRPCRouter({
           data: {
             userId: user.id,
             email: user.email!,
-            username: user.user_metadata?.name || user.user_metadata?.full_name || "",
-            profilePictureUrl: user.user_metadata.avatar_url || user.user_metadata?.picture
+            username: user.user_metadata?.name as string,
+            profilePictureUrl: user.user_metadata.avatar_url as string,
           }
         })
         return profile;
@@ -101,7 +100,7 @@ export const profileRouter = createTRPCRouter({
     if (input) {
       const imageBuffer = Buffer.from(input, "base64");
 
-      const { data, error } = await supabaseAdminClient.storage
+      const { error } = await supabaseAdminClient.storage
       .from(SUPABASE_BUCKET.AVATAR)
       .upload(fileName, imageBuffer, {
         contentType: "image/png",

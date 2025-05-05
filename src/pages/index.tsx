@@ -5,8 +5,6 @@ import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-// import { api } from "~/utils/api";
-
 export default function Home() {
   const [isLogin, setIsLogin] = useState(false);
 
@@ -50,23 +48,13 @@ export default function Home() {
         setIsLogin(false);
       }
     } catch (err) {
+      console.error("Error checking auth:", err);
       setIsLogin(false);
     }
   };
 
   useEffect(() => {
-    // void (async () => {
-      
-    //   const { data } = await supabase.auth.getUser();
-
-    //   if (data.user) {
-    //     setIsLogin(true);
-    //   } else {
-    //     setIsLogin(false);
-    //   }
-    // })();
-
-    checkAuth();
+    void checkAuth();
   }, [router]);
 
   return (

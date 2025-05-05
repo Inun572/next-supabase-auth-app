@@ -23,8 +23,7 @@ const CallbackPage = () => {
   useEffect(() => {
     const handleRedirect = async () => {
       const {
-        data: { session },
-        error,
+        data: { session }
       } = await supabase.auth.getSession();
 
       if (session) {
@@ -33,16 +32,16 @@ const CallbackPage = () => {
         setUserData(user);
       } else {
         // gagal login
-        router.replace("/login");
+        await router.replace("/login");
       }
     };
 
-    handleRedirect();
+    void handleRedirect();
   }, [router]);
 
   useEffect(() => {
     if (userData) {
-      getUserProfile.refetch().then(({data, error}) => {
+      void getUserProfile.refetch().then(({data, error}) => {
         if (error) {
             toast.error("Gagal mendapatkan data user");
         }
@@ -51,7 +50,7 @@ const CallbackPage = () => {
             createUserProfile.mutate();
         }
 
-        router.replace("/");
+        void router.replace("/");
       });
     }
   }, [userData, router, getUserProfile, createUserProfile]);

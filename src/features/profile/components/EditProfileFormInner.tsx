@@ -1,4 +1,4 @@
-import { useForm, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import {
   FormControl,
   FormField,
@@ -10,11 +10,8 @@ import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import { type EditProfileFormSchema } from "../forms/edit-profile";
 
-type EditProfileFormInnerProps = {
-  defaultValues: EditProfileFormSchema;
-}
 
-export const EditProfileFormInner = (props: EditProfileFormInnerProps) => {
+export const EditProfileFormInner = () => {
   const form = useFormContext<EditProfileFormSchema>();
 
   return (
