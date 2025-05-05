@@ -23,6 +23,10 @@ import GuestPage from "~/components/layout/GuestPage";
 
 const LoginPage = () => {
   const form = useForm<RegisterFormSchema>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
     resolver: zodResolver(registerFormSchema),
   });
 
@@ -69,6 +73,15 @@ const LoginPage = () => {
     }
   };
 
+  const handleLoginGoogle = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/callback`,
+      }
+    });
+  };
+
   return (
     <main>
       <GuestPage>
@@ -92,6 +105,7 @@ const LoginPage = () => {
                   <RegisterFormInner
                     onRegisterSubmit={handleLoginSubmit}
                     buttonText="Masuk"
+                    showPassword
                   />
                 </Form>
 
@@ -111,6 +125,7 @@ const LoginPage = () => {
                     variant="outline"
                     size="lg"
                     className="w-full cursor-pointer"
+                    onClick={handleLoginGoogle}
                   >
                     <FcGoogle />
                     <span>Masuk dengan Google</span>

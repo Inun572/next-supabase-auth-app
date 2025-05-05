@@ -16,22 +16,58 @@ export default function Home() {
     await supabase.auth.signOut();
     setIsLogin(false);
     toast.success("Kamu telah keluar");
+    await router.replace("/");
   };
 
   const onLogin = async () => {
     await router.push("/login");
   };
-  useEffect(() => {
-    void (async () => {
-      const { data } = await supabase.auth.getUser();
 
-      if (data.user) {
+  const checkAuth = async () => {
+    try {
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError) {
+        setIsLogin(false);
+        return;
+      }
+
+      if (!sessionData.session) {
+        setIsLogin(false);
+        return;
+      }
+
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+
+      if (userError) {
+        setIsLogin(false);
+        return;
+      }
+
+      if (userData?.user) {
         setIsLogin(true);
       } else {
         setIsLogin(false);
       }
-    })();
-  }, []);
+    } catch (err) {
+      setIsLogin(false);
+    }
+  };
+
+  useEffect(() => {
+    // void (async () => {
+      
+    //   const { data } = await supabase.auth.getUser();
+
+    //   if (data.user) {
+    //     setIsLogin(true);
+    //   } else {
+    //     setIsLogin(false);
+    //   }
+    // })();
+
+    checkAuth();
+  }, [router]);
 
   return (
     <>
@@ -39,9 +75,15 @@ export default function Home() {
         <h1 className="text-primary text-3xl">Hello Qepo</h1>
         <ThemeToggle />
         {isLogin ? (
+          <div className="flex flex-col gap-y-4">
+          <Button variant="outline" onClick={() => router.push("/profile")}>
+            Profile
+          </Button>
+
           <Button variant="destructive" onClick={handleLogout}>
             Keluar
           </Button>
+          </div>
         ) : (
           <Button onClick={onLogin}>Login</Button>
         )}
