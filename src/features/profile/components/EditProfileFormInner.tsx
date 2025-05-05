@@ -1,6 +1,5 @@
-import { useForm } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 import {
-  Form,
   FormControl,
   FormField,
   FormItem,
@@ -12,22 +11,14 @@ import { Textarea } from "~/components/ui/textarea";
 import { type EditProfileFormSchema } from "../forms/edit-profile";
 
 type EditProfileFormInnerProps = {
-  defaultValues: {
-    username?: string;
-    bio?: string | null;
-  };
-};
+  defaultValues: EditProfileFormSchema;
+}
 
 export const EditProfileFormInner = (props: EditProfileFormInnerProps) => {
-  const form = useForm<EditProfileFormSchema>({
-    defaultValues: {
-      bio: props.defaultValues.bio ?? "",
-      username: props.defaultValues.username ?? "",
-    },
-  });
+  const form = useFormContext<EditProfileFormSchema>();
 
   return (
-    <Form {...form}>
+    <form className="grid flex-1 grid-cols-2 gap-y-4">
       <FormField
         control={form.control}
         name="username"
@@ -55,6 +46,6 @@ export const EditProfileFormInner = (props: EditProfileFormInnerProps) => {
           </FormItem>
         )}
       />
-    </Form>
+    </form>
   );
 };
